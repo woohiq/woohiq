@@ -10,7 +10,7 @@ email : tkdqls92@gmail.com
 
 ![Java](https://img.shields.io/badge/Java-EE4C2C.svg?&style=for-the-badge&logo=JAVA&logoColor=white) (2023년 1월~현재)
 
-<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=1c1c1c"/> (2023년 1월~현재)
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=1c1c1c"/> (2023년 1월~2월)
 
 <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=HTML5&logoColor=white"/> (2023년 1월~현재)
 
