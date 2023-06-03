@@ -6,19 +6,19 @@ email : tkdqls92@gmail.com
 
 ### 🍀 Skills
 
-<img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=Python&logoColor=f5dd42"/> (대학교 1학년~4학년)
+<img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=Python&logoColor=f5dd42"/> (2017년 ~ 2022년)
 
-<img src="https://img.shields.io/badge/C-A8B9CC?style=flat-square&logo=C&logoColor=white"/> (대학교 2학년~3학년)
+<img src="https://img.shields.io/badge/C-A8B9CC?style=flat-square&logo=C&logoColor=white"/> (2018년 ~ 2021년)
 
-![Java](https://img.shields.io/badge/Java-EE4C2C.svg?&style=for-the-badge&logo=JAVA&logoColor=white) (2023년 1월~5월)
+![Java](https://img.shields.io/badge/Java-EE4C2C.svg?&style=for-the-badge&logo=JAVA&logoColor=white) (2023년 1월 ~ 2023년 5월)
 
-<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=1c1c1c"/> (2023년 1월~2월)
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=1c1c1c"/> (2023년 1월 ~ 2023년 2월)
 
-<img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=HTML5&logoColor=white"/> (2023년 1월~5월)
+<img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=HTML5&logoColor=white"/> (2023년 1월 ~ 2023년 5월)
 
 <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=MySQL&logoColor=white"/> (2023년 3월)
 
-<img src="https://img.shields.io/badge/Vue.js-4FC08D?style=flat-square&logo=Vue.js&logoColor=white"/> (2023년 4월~5월)
+<img src="https://img.shields.io/badge/Vue.js-4FC08D?style=flat-square&logo=Vue.js&logoColor=white"/> (2023년 4월 ~ 2023년 5월)
 
 ### 🍀 Project
 
