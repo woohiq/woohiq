@@ -4,6 +4,7 @@ email : tkdqls92@gmail.com
 
 현재 SSAFY 에서 SW관련 교육을 받고 있습니다
 
+
 ### 🍀 Skills
 
 <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=Python&logoColor=f5dd42"/> (2017년 ~ 2022년)
@@ -19,6 +20,7 @@ email : tkdqls92@gmail.com
 <img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=MySQL&logoColor=white"/> (2023년 3월)
 
 <img src="https://img.shields.io/badge/Vue.js-4FC08D?style=flat-square&logo=Vue.js&logoColor=white"/> (2023년 4월 ~ 2023년 5월)
+
 
 ### 🍀 Project
 
