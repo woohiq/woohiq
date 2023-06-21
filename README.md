@@ -2,8 +2,8 @@
 
 email : tkdqls92@gmail.com
 
-현재 SSAFY 에서 SW관련 교육을 받고 있습니다
-(2023.01.04 ~ )
+SSAFY 에서 SW관련 교육을 받았습니다
+(2023.01.04 ~ 2023.06.14)
 
 
 ### 🍀 Skills
