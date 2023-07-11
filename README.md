@@ -5,7 +5,7 @@ email : tkdqls92@gmail.com
 SSAFY 에서 SW관련 교육을 받았습니다
 (2023.01.04 ~ 2023.06.14)
 
-LG CNS
+LG CNS 에서 개발 업무를 하고 있습니다
 (2023.07.03 ~ 현재)
 
 
