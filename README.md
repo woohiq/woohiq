@@ -25,7 +25,7 @@ LG CNS 에서 구매 플랫폼 개발 업무를 하고 있습니다
 
 <img src="https://img.shields.io/badge/Vue.js-4FC08D?style=flat-square&logo=Vue.js&logoColor=white"/> ( 2023년 4월 ~ 2023년 5월 )
 
-+ SAP (예정)
+SAP (예정)
 
 ### 🍀 Project
 
