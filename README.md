@@ -28,7 +28,9 @@ LG CNS 에서 SaaS형 구매 플랫폼 개발 업무를 맡았습니다.
 
 <img src="https://img.shields.io/badge/Vue.js-4FC08D?style=flat-square&logo=Vue.js&logoColor=white"/> ( 2023년 4월 ~ 2023년 5월 )
 
-<img src="https://i.imgur.com/5NFOKC5.png" width="10"/> 
+<img src="https://i.imgur.com/5NFOKC5.png" width="30"/> 
+
+
 
 ### 🍀 Project
 
