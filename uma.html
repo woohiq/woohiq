@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>우마무스메 계산기</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,7 +13,7 @@
             text-align: center;
         }
         table {
-            width: 50%;
+            width: 60%;
             margin: 20px auto;
             border-collapse: collapse;
         }
@@ -29,37 +31,84 @@
             height: 2px;
             background-color: #333;
         }
+        .button-group {
+            display: inline-block;
+            margin-left: 10px;
+        }
+        .button-group button {
+            margin-left: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .green {
+            color: green;
+            font-weight: bold;
+        }
+        .red {
+            color: red;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <h1>우마무스메 가챠 당첨 확률 계산기</h1>
     
     <label for="probability">당첨 확률 (%): </label>
-    <input type="number" id="probability" min="0" max="100" step="0.01">%
+    <input type="number" id="probability" min="0" max="100" step="0.01" value="0.75">%
     <br><br>
     
     <label for="attempts">가챠 횟수: </label>
     <input type="number" id="attempts" min="0" max="99999999">
+    <span class="button-group">
+        <button onclick="setAttempts(200)">1천장</button>
+        <button onclick="setAttempts(400)">2천장</button>
+        <button onclick="setAttempts(600)">3천장</button>
+        <button onclick="setAttempts(800)">4천장</button>
+        <button onclick="setAttempts(1000)">5천장</button>
+    </span>
+    <br><br>
+
+    <label for="ceiling">천장 개수: </label>
+    <input type="number" id="ceiling" min="1" max="99999" value="200">
     <br><br>
     
-    <button onclick="calculateProbabilities()">계산</button>
+    <div class="row justify-content-center mt-4">
+        <!-- 단일픽업 계산 버튼 -->
+        <div class="col-md-auto">
+            <button onclick="calculateSinglePickup()" class="btn btn-primary">단일픽업 계산</button>
+        </div>
+        <!-- 이중픽업 계산 버튼 -->
+        <div class="col-md-auto">
+            <button onclick="calculateDoublePickup()" class="btn btn-success">이중픽업 계산</button>
+        </div>
+    </div>
     
     <div class="separator"></div>
     
     <h2 id="resultHeader" class="hidden">결과</h2>
-    
+    <div id="fullPullProbability" class="hidden">
+        <strong>풀돌 가능 확률: <span id="fullPullProbValue" class="green"></span></strong>
+    </div>
     <table id="resultTable" class="hidden">
         <thead>
             <tr>
                 <th>당첨 횟수</th>
                 <th>확률 (%)</th>
+                <th>누적 확률 (%)</th>
+                <th>풀돌 가능</th>
             </tr>
         </thead>
         <tbody id="resultBody">
         </tbody>
     </table>
-    
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
+        function setAttempts(value) {
+            document.getElementById("attempts").value = value;
+        }
+        
         function binomialProbability(n, k, p) {
             if (k > n) return 0;
             if (k === 0) return Math.pow(1 - p, n);
@@ -73,49 +122,185 @@
             return Math.exp(logProb);
         }
         
-        function calculateProbabilities() {
+        function calculateSinglePickup() {
             let p = parseFloat(document.getElementById("probability").value) / 100;
             let n = parseInt(document.getElementById("attempts").value);
+            let ceiling = parseInt(document.getElementById("ceiling").value);
             let resultTable = document.getElementById("resultTable");
             let resultBody = document.getElementById("resultBody");
             let resultHeader = document.getElementById("resultHeader");
-            
-            if (isNaN(p) || isNaN(n) || p < 0 || p > 1 || n < 0 || n > 99999999) {
+            let fullPullProbabilityDiv = document.getElementById("fullPullProbability");
+            let fullPullProbValue = document.getElementById("fullPullProbValue");
+
+            if (isNaN(p) || isNaN(n) || isNaN(ceiling) || p < 0 || p > 1 || n < 0 || n > 99999999 || ceiling < 1 || ceiling > 99999) {
                 alert("올바른 값을 입력해주세요.");
                 return;
             }
-            
+
             resultBody.innerHTML = "";
-            let hasResult = false;
-            let minShown = null;
-            
+            let cumulativeProbability = 0;
+            let fullPullProb = 0; // "풀돌" 확률 누적
+            let fullPullPossibleProb = 0; // "풀돌 가능" 확률 누적
+            let ceilingCount = Math.floor(n / ceiling);
+
             for (let k = 0; k <= n; k++) {
-                let prob = binomialProbability(n, k, p) * 100; // 백분율 변환
-                if (prob >= 0.1) { // 0.1% 이상인 경우만 표시
-                    let row = `<tr><td>${k}</td><td>${prob.toFixed(4)}%</td></tr>`;
+                let prob = binomialProbability(n, k, p) * 100;
+                cumulativeProbability += prob;
+
+                // "풀돌 가능" 조건 판단
+                let isFullPull = k >= 5 || (k + ceilingCount) >= 5;
+                if (isFullPull && k < 5) {
+                    fullPullPossibleProb += prob; // "풀돌 가능"인 경우만 누적
+                }
+
+                let fullPullText = isFullPull ? `<span class="green">가능</span>` : `<span class="red">불가능</span>`;
+
+                // 당첨 횟수(k < 5)의 경우 테이블에 추가
+                if (k < 5) {
+                    let row = `<tr><td>${k}</td><td>${prob.toFixed(4)}%</td><td>${cumulativeProbability.toFixed(4)}%</td><td>${fullPullText}</td></tr>`;
                     resultBody.innerHTML += row;
-                    hasResult = true;
-                    if (minShown === null) minShown = k;
+                } else {
+                    fullPullProb += prob; // "풀돌" 확률 누적
                 }
             }
-            
-            // 당첨 횟수가 더 많은 것이 표시되면, 작은 값도 강제로 표시
-            if (minShown !== null) {
-                for (let k = minShown - 1; k >= 0; k--) {
-                    let prob = binomialProbability(n, k, p) * 100;
-                    let row = `<tr><td>${k}</td><td>${prob.toFixed(4)}%</td></tr>`;
-                    resultBody.innerHTML = row + resultBody.innerHTML;
-                }
+
+            // "풀돌" 확률 테이블에 추가
+            if (fullPullProb > 0) {
+                let row = `<tr><td>풀돌</td><td>${fullPullProb.toFixed(4)}%</td><td>100%</td><td><span class="green">가능</span></td></tr>`;
+                resultBody.innerHTML += row;
+                fullPullPossibleProb += fullPullProb; // "풀돌" 확률을 한 번만 누적
             }
-            
-            if (hasResult) {
-                resultTable.classList.remove("hidden");
-                resultHeader.classList.remove("hidden");
-            } else {
-                resultTable.classList.add("hidden");
-                resultHeader.classList.add("hidden");
+
+            // "풀돌 가능 확률" 표시 (최종 합산)
+            resultTable.classList.remove("hidden");
+            resultHeader.classList.remove("hidden");
+            fullPullProbabilityDiv.classList.remove("hidden");
+            fullPullProbValue.innerText = `${fullPullPossibleProb.toFixed(4)}%`; // 결과 표시
+        }
+
+        function calculateDoublePickup() {
+        let p = parseFloat(document.getElementById("probability").value) / 100;
+        let n = parseInt(document.getElementById("attempts").value);
+        let ceiling = parseInt(document.getElementById("ceiling").value);
+        let resultTable = document.getElementById("resultTable");
+        let resultBody = document.getElementById("resultBody");
+        let resultHeader = document.getElementById("resultHeader");
+        let fullPullProbabilityDiv = document.getElementById("fullPullProbability");
+        let fullPullProbValue = document.getElementById("fullPullProbValue");
+
+        if (isNaN(p) || isNaN(n) || isNaN(ceiling) || p < 0 || p > 1 || n < 0 || n > 99999999 || ceiling < 1 || ceiling > 99999) {
+            alert("올바른 값을 입력해주세요.");
+            return;
+        }
+
+        resultBody.innerHTML = "";
+        let cumulativeProbability = 0;
+        let ceilingCount = Math.floor(n / ceiling);
+        let fullPullPossibleProb = 0; // 풀돌 가능 확률
+
+        // (x, y) 조합 계산
+        for (let x = 0; x <= 4; x++) {
+            for (let y = 0; y <= 4; y++) {
+                let prob = binomialProbability(n, x, p) * binomialProbability(n, y, p) * 100;
+                cumulativeProbability += prob;
+
+                // 천장 수 배분 로직
+                let neededForX = Math.max(0, 5 - x);
+                let neededForY = Math.max(0, 5 - y);
+                let remainingCeiling = ceilingCount;
+
+                if (remainingCeiling >= neededForX) {
+                    remainingCeiling -= neededForX;
+                    neededForX = 0;
+                } else {
+                    neededForX -= remainingCeiling;
+                    remainingCeiling = 0;
+                }
+
+                if (remainingCeiling >= neededForY) {
+                    remainingCeiling -= neededForY;
+                    neededForY = 0;
+                } else {
+                    neededForY -= remainingCeiling;
+                    remainingCeiling = 0;
+                }
+
+                let isFullPull = neededForX === 0 && neededForY === 0;
+                if (isFullPull) {
+                    fullPullPossibleProb += prob; // "가능"인 확률 누적
+                }
+
+                let fullPullText = isFullPull ? `<span class="green">가능</span>` : `<span class="red">불가능</span>`;
+
+                let row = `<tr><td>(${x}, ${y})</td><td>${prob.toFixed(4)}%</td><td>${cumulativeProbability.toFixed(4)}%</td><td>${fullPullText}</td></tr>`;
+                resultBody.innerHTML += row;
             }
         }
+
+        // (x, 풀돌) 계산
+        for (let x = 0; x <= 4; x++) {
+            let fullPullProb = binomialProbability(n, x, p) * (1 - cumulativeProbability / 100) * 100;
+            cumulativeProbability += fullPullProb;
+
+            let neededForX = Math.max(0, 5 - x);
+            let remainingCeiling = ceilingCount;
+
+            if (remainingCeiling >= neededForX) {
+                remainingCeiling -= neededForX;
+                neededForX = 0;
+            }
+
+            let isFullPullRow = neededForX === 0;
+            if (isFullPullRow) {
+                fullPullPossibleProb += fullPullProb; // "가능" 확률 추가
+            }
+
+            let fullPullTextRow = isFullPullRow ? `<span class="green">가능</span>` : `<span class="red">불가능</span>`;
+
+            let row = `<tr><td>(${x}, 풀돌)</td><td>${fullPullProb.toFixed(4)}%</td><td>${cumulativeProbability.toFixed(4)}%</td><td>${fullPullTextRow}</td></tr>`;
+            resultBody.innerHTML += row;
+        }
+
+        // (풀돌, y) 계산
+        for (let y = 0; y <= 4; y++) {
+            let fullPullProb = (1 - cumulativeProbability / 100) * binomialProbability(n, y, p) * 100;
+            cumulativeProbability += fullPullProb;
+
+            let neededForY = Math.max(0, 5 - y);
+            let remainingCeiling = ceilingCount;
+
+            if (remainingCeiling >= neededForY) {
+                remainingCeiling -= neededForY;
+                neededForY = 0;
+            }
+
+            let isFullPullCol = neededForY === 0;
+            if (isFullPullCol) {
+                fullPullPossibleProb += fullPullProb; // "가능" 확률 추가
+            }
+
+            let fullPullTextCol = isFullPullCol ? `<span class="green">가능</span>` : `<span class="red">불가능</span>`;
+
+            let row = `<tr><td>(풀돌, ${y})</td><td>${fullPullProb.toFixed(4)}%</td><td>${cumulativeProbability.toFixed(4)}%</td><td>${fullPullTextCol}</td></tr>`;
+            resultBody.innerHTML += row;
+        }
+
+        // (풀돌, 풀돌) 계산
+        let fullFullProb = (1 - cumulativeProbability / 100) * 100;
+        cumulativeProbability += fullFullProb;
+        fullPullPossibleProb += fullFullProb; // "가능" 확률 추가
+
+        let row = `<tr><td>(풀돌, 풀돌)</td><td>${fullFullProb.toFixed(4)}%</td><td>${cumulativeProbability.toFixed(4)}%</td><td><span class="green">가능</span></td></tr>`;
+        resultBody.innerHTML += row;
+
+        // 풀돌 가능 확률 표시
+        fullPullProbabilityDiv.classList.remove("hidden");
+        fullPullProbValue.innerText = `${fullPullPossibleProb.toFixed(4)}%`; // "풀돌 가능 확률" 값 갱신
+
+        resultTable.classList.remove("hidden");
+        resultHeader.classList.remove("hidden");
+    }
+
     </script>
 </body>
 </html>
